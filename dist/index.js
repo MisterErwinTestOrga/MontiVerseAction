@@ -12337,9 +12337,9 @@ The MontiVerse is a collection of (internal and public) language projects.</deta
                     pretty = `:heavy_check_mark: Changes pass the MontiVerse \n ${withTable(errorTable)}\n${withDetails('details')}`
                 }
                 core.setOutput('pretty_output', pretty);
-                core.summary.addRaw(pretty);
                 if (errorMessage)
                     core.setFailed(errorMessage);
+                await core.summary.addRaw(pretty).addEOL().write();
 
                 break;
             }
