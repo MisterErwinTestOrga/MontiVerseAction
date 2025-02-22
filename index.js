@@ -65,7 +65,9 @@ const pollPipeline = async (host, projectId, token, githubToken, pipelineId, web
             core.setOutput("status", status);
             console.log(`Pipeline status: ${status} (${webUrl})`);
 
-            if (status === 'failed' || status === 'canceled' || status === 'skipped') {
+            if (breakStatusList.includes(status)) {
+                console.log(`Status "${status}" detected, breaking loop!`);
+
                 const jobsResponse = await fetchGitLab(`https://${host}/api/v4/projects/${projectId}/pipelines/${pipelineId}/jobs?include_retried=true`, token)
                 if (!checkOkay(jobsResponse)) {
                     break;
@@ -187,11 +189,6 @@ The MontiVerse is a collection of (internal and public) language projects.</deta
                 if (errorMessage)
                     core.setFailed(errorMessage);
 
-
-            }
-
-            if (breakStatusList.includes(status)) {
-                console.log(`Status "${status}" detected, breaking loop!`);
                 break;
             }
         } catch (error) {
