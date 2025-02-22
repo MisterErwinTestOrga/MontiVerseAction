@@ -26,7 +26,7 @@ jobs:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
           id: '91803'
           ref: 'main'
-          variables: ''
+          variables: '{}'
       - name: Get the output status
         run: echo "The status was ${{ steps.test.outputs.status }}"
       - name: Get the output web_url
