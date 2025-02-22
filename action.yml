@@ -1,6 +1,6 @@
-name: 'GitLab Pipeline Trigger'
-description: 'Triggers and waits for a GitLab pipeline to complete'
-author: 'Patrizio Bekerle <patrizio@bekerle.com>'
+name: 'MontiVerse GitLab Pipeline Trigger'
+description: 'Triggers and waits for a MontiVerse pipeline to complete'
+author: 'Patrizio Bekerle & Alex Lüpges'
 branding:
   icon: 'git-commit'
   color: 'orange'
@@ -25,6 +25,10 @@ inputs:
     description: 'Pipeline Access Token, see https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html'
     required: false
     default: ''
+  github_access_token:
+    description: 'GitHub Pipeline Access Token'
+    required: false
+    default: ''
   variables:
     description: 'A map of key-valued strings containing the pipeline variables. For example: { VAR1: "value1", VAR2: "value2" }.'
     required: false
@@ -34,6 +38,8 @@ outputs:
     description: 'The status of the pipeline.'
   web_url:
     description: 'The URL of the pipeline.'
+  pretty_output:
+    description: 'A pretty markdown comment'
 runs:
   using: 'node20'
   main: 'dist/index.js'

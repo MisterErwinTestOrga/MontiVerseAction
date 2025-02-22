@@ -18,15 +18,22 @@ jobs:
         uses: ./
         id: test
         with:
-          # Triggers https://gitlab.com/digital-blueprint/gitlab-pipeline-trigger-action-example/-/pipelines
-          host: 'gitlab.com'
-          trigger_token: ${{ secrets.DEPLOY_TRIGGER_TOKEN }}
+          # Triggers
+          host: 'git.rwth-aachen.de'
+          trigger_token: ${{ secrets.DEPLOY_MONTIVERSE_TRIGGER_TOKEN  }}
           # not needed for public repos
-          #access_token: ${{ secrets.DEPLOY_ACCESS_TOKEN }}
-          id: '44347238'
+          access_token: ${{ secrets.DEPLOY_MONTIVERSE_ACCESS_TOKEN  }}
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          id: '91803'
           ref: 'main'
-          variables: '{"VAR1":"value1","VAR2":"value2"}'
+          variables: ''
       - name: Get the output status
         run: echo "The status was ${{ steps.test.outputs.status }}"
       - name: Get the output web_url
         run: echo "The web_url was ${{ steps.test.outputs.web_url }}"
+      - name: Create commit comment
+        uses: peter-evans/commit-comment@v3
+        with:
+          body: ${steps.test.outputs.status}
+          reactions: '+1'
+

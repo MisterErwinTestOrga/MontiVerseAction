@@ -1,5 +1,11 @@
 # Changelog
 
+## MontiVerse adaption
+- adapted to the MontiVerse:
+  - report on jobs
+  - handle broken projects
+  - pretty comment option
+
 ## v1.2.0
 
 - add: invalid access/trigger token error handling (for [#34](https://github.com/digital-blueprint/gitlab-pipeline-trigger-action/issues/34), thank you, @nepalevov)
