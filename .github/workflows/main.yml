@@ -34,7 +34,7 @@ jobs:
       - name: Get the output web_url
         run: echo "The web_url was ${{ steps.test.outputs.web_url }}"
       - name: Get the output pretty_output
-        run: echo "${steps.test.outputs.pretty_output}}" >> $GITHUB_STEP_SUMMARY
+        run: echo "The pretty_output was ${{ steps.test.outputs.pretty_output }}"
       - name: Create commit comment
         uses: peter-evans/commit-comment@v3
         with:

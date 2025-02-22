@@ -174,13 +174,16 @@ const pollPipeline = async (host, projectId, token, githubToken, pipelineId, web
                 const withDetails = (summary) => `<details> <summary>${summary}</summary>\n 
 ${withTable(infoTable)} 
 The MontiVerse is a collection of (internal and public) language projects.</details>`;
+                let pretty;
                 if (failed) {
-                    core.setOutput('pretty_output', `:x: Changes break the MontiVerse \n ${withTable(errorTable)}\n${withDetails('details')}`)
+                    pretty = `:x: Changes break the MontiVerse \n ${withTable(errorTable)}\n${withDetails('details')}`
                 } else if (errorTable) {
-                    core.setOutput('pretty_output', `:warning: Changes might break the MontiVerse \n ${withTable(errorTable)}\n${withDetails('details')}`)
+                    pretty = `:warning: Changes might break the MontiVerse \n ${withTable(errorTable)}\n${withDetails('details')}`
                 } else {
-                    core.setOutput('pretty_output', `:heavy_check_mark: Changes pass the MontiVerse \n ${withTable(errorTable)}\n${withDetails('details')}`)
+                    pretty = `:heavy_check_mark: Changes pass the MontiVerse \n ${withTable(errorTable)}\n${withDetails('details')}`
                 }
+                core.setOutput('pretty_output', 'pretty');
+                core.summary.addRaw(pretty);
                 if (errorMessage)
                     core.setFailed(errorMessage);
 
