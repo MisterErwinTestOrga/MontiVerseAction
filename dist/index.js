@@ -12308,13 +12308,13 @@ const pollPipeline = async (host, projectId, token, githubToken, pipelineId, web
                         if (job.prev === 'fail') {
                             console.warn("  Job might have failed " + jobKey);
                             core.warning(`Change might have broken project '${jobKey}' (CI of project failed before)`)
-                            infoTable.push(`| ${jobKey} | [:warning:](${job.web_url})| `)
-                            errorTable.push(`| ${jobKey} | [:warning:](${job.web_url})| `)
+                            infoTable.push(`| ${jobKey} | [:warning:](${job.web_url} "Project also does not build on its main branch")| `)
+                            errorTable.push(`| ${jobKey} | [:warning:](${job.web_url} "Project also does not build on its main branch")| `)
                         } else {
                             console.error("  Job broke " + jobKey);
                             core.error(`Change broke project '${jobKey}'`)
                             errorMessage += `Job ${jobKey} failed\n`;
-                            infoTable.push(`| ${jobKey} | [:x:](${job.web_url})| `)
+                            infoTable.push(`| ${jobKey} | [:x:](${job.web_url}")| `)
                             errorTable.push(`| ${jobKey} | [:x:](${job.web_url})| `)
                             failed = true;
                         }
@@ -12323,7 +12323,7 @@ const pollPipeline = async (host, projectId, token, githubToken, pipelineId, web
                     }
                 }
                 const withTable = (table) => ` | Project | Status | \n |---|---| \n ${table.join('\n')}`;
-                const withDetails = (summary) => `<details> <summary>${summary}</summary> 
+                const withDetails = (summary) => `<details> <summary>${summary}</summary>\n 
 ${withTable(infoTable)} 
 The MontiVerse is a collection of (internal and public) language projects.</details>`;
                 if (failed) {
