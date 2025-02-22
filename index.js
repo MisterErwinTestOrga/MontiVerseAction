@@ -155,7 +155,12 @@ const pollPipeline = async (host, projectId, token, githubToken, pipelineId, web
                     const job = storedJobs[jobKey];
                     console.log(`${jobKey}: ${job.prev} -> ${job.status}  (${job.web_url})`)
                     if (job.status !== 'success') {
-                        if (job.prev === 'fail') {
+                        if (job.status === 'skipped') {
+                            failed = true;
+                            console.warn("  Job was skipped " + jobKey);
+                            core.debug(`Change could not be tested against '${jobKey}' (skipped)`)
+                            infoTable.push(`| ${jobKey} | [:grey_question:](${job.web_url} "Project also does not build on its main branch")| `)
+                        } else if (job.prev === 'fail') {
                             console.warn("  Job might have failed " + jobKey);
                             core.warning(`Change might have broken project '${jobKey}' (CI of project failed before)`)
                             infoTable.push(`| ${jobKey} | [:warning:](${job.web_url} "Project also does not build on its main branch")| `)
@@ -175,6 +180,7 @@ const pollPipeline = async (host, projectId, token, githubToken, pipelineId, web
                 const withTable = (table) => ` | Project | Status | \n |---|---| \n ${table.join('\n')}`;
                 const withDetails = (summary) => `<details> <summary>${summary}</summary>\n 
 ${withTable(infoTable)} 
+
 The MontiVerse is a collection of (internal and public) language projects.</details>`;
                 let pretty;
                 if (failed) {
@@ -185,8 +191,8 @@ The MontiVerse is a collection of (internal and public) language projects.</deta
                     pretty = `:heavy_check_mark: Changes pass the MontiVerse \n ${withTable(errorTable)}\n${withDetails('details')}`
                 }
                 core.setOutput('pretty_output', pretty);
-                if (errorMessage)
-                    core.setFailed(errorMessage);
+                if (errorMessage || failed)
+                    core.setFailed('MontiVerse did not succeed: ' + errorMessage);
                 await core.summary.addRaw(pretty).addEOL().write();
 
                 break;
