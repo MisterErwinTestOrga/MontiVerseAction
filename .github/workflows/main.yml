@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     name: A test job
     permissions:
-      contents: read
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
