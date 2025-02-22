@@ -34,6 +34,6 @@ jobs:
       - name: Create commit comment
         uses: peter-evans/commit-comment@v3
         with:
-          body: ${steps.test.outputs.status}
+          body: ${{steps.test.outputs.status}}
           reactions: '+1'
 
