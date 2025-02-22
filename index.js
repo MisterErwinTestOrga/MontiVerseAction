@@ -208,41 +208,39 @@ The MontiVerse is a collection of (internal and public) language projects.</deta
 async function run() {
     const host = encodeURIComponent(core.getInput('host'));
     const projectId = encodeURIComponent(core.getInput('id'));
-    // const triggerToken = core.getInput('trigger_token');
+    const triggerToken = core.getInput('trigger_token');
     const accessToken = core.getInput('access_token');
     const githubAccessToken = core.getInput('github_access_token');
     const ref = core.getInput('ref');
-    // const variables = JSON.parse(core.getInput('variables'));
+    const variables = JSON.parse(core.getInput('variables'));
 
     console.log(`Triggering pipeline ${projectId} with ref ${ref} on ${host}!`);
 
     try {
-        // const url = `https://${host}/api/v4/projects/${projectId}/trigger/pipeline`;
-        //
-        // // https://docs.gitlab.com/ee/api/pipeline_triggers.html#trigger-a-pipeline-with-a-token
-        // const response = await fetch(url, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         token: triggerToken,
-        //         ref: ref,
-        //         variables: variables,
-        //     }),
-        // });
-        //
-        // if (!response.ok) {
-        //     let errorMessage = `GitLab API returned status code ${response.status}.`;
-        //     if (response.status === 404) {
-        //         errorMessage = "The specified resource does not exist, or an invalid/expired trigger token was used.";
-        //     }
-        //     return core.setFailed(errorMessage);
-        // }
-        //
-        // const data = await response.json();
+        const url = `https://${host}/api/v4/projects/${projectId}/trigger/pipeline`;
 
-        const data = {id: 1623175, status: "pending", web_url: 'https://git.rwth-aachen.de/monticore/montiverseci/-/pipelines/1623175'};
+        // https://docs.gitlab.com/ee/api/pipeline_triggers.html#trigger-a-pipeline-with-a-token
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: triggerToken,
+                ref: ref,
+                variables: variables,
+            }),
+        });
+
+        if (!response.ok) {
+            let errorMessage = `GitLab API returned status code ${response.status}.`;
+            if (response.status === 404) {
+                errorMessage = "The specified resource does not exist, or an invalid/expired trigger token was used.";
+            }
+            return core.setFailed(errorMessage);
+        }
+
+        const data = await response.json();
 
         core.setOutput("id", data.id);
         core.setOutput("status", data.status);
